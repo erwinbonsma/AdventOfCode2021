@@ -1,12 +1,11 @@
 import re
 
-dots = set()
-
 def fold_x(dots, col):
     return set((x, y) if x < col else (2 * col - x, y) for x, y in dots)
 def fold_y(dots, row):
     return set((x, y) if y < row else (x, 2 * row - y) for x, y in dots)
 
+dots = set()
 with open("input-13.txt") as fp:
     for line in fp:
         line = line.strip()
@@ -27,4 +26,12 @@ with open("input-13.txt") as fp:
             dots = fold_y(dots, int(line[2:]))
         else:
             assert(False)
-        print("# = ", len(dots))
+
+w = max(x for x, _ in dots) + 1
+h = max(y for _, y in dots) + 1
+m = [[' '] * w for _ in range(h)]
+for x, y in dots:
+    m[y][x] = '*'
+
+for row in m:
+    print(''.join(row))
