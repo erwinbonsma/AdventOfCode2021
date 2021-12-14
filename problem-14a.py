@@ -12,9 +12,6 @@ with open("input-14.txt") as fp:
 
         table[tokens[0]] = tokens[2]
 
-print(polymer)
-print(table)
-
 def expand(polymer):
     result = []
     for ch1, ch2 in zip(polymer[0:], polymer[1:]):
@@ -26,7 +23,6 @@ def expand(polymer):
 
 for _ in range(10):
     polymer = expand(polymer)
-    print(polymer)
 
 char_counts = Counter(polymer)
 print(max(char_counts.values()) - min(char_counts.values()))
