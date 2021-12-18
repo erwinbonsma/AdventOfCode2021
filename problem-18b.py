@@ -162,8 +162,13 @@ if __name__ == '__main__':
     doctest.testmod()
 
     with open("input-18.txt") as fp:
-        total = parse_string(next(fp).strip())
-        for line in fp:
-            pair = parse_string(line.strip())
-            total = add(total, pair)
-        print(magnitude(total))
+        pairs = [parse_string(line.strip()) for line in fp]
+
+    print(
+        max(
+            magnitude(add(pairs[i], pairs[j]))
+            for i in range(len(pairs))
+            for j in range(len(pairs))
+            if i != j
+        )
+    )
