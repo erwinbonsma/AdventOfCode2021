@@ -129,17 +129,7 @@ def find_match(scanner1, scanner2):
                     return scanner2_pos, o2
     return None, None
 
-scanners = read_input("input-19.txt")
 
-def find_next_match(connected, pending):
-    for s1 in connected:
-        for s2 in pending:
-            s2_pos, s2_rot = find_match(s1, s2)
-            if s2_pos is not None:
-                print('Connected {0} and {1} at {2}'.format(s1.id, s2.id, s2_pos))
-                connected.append(s2)
-                pending.remove(s2)
-                return s1, s2, s2_pos, s2_rot
 
 def extend_map(beacon_map, scanner):
     beacon_positions = [beacon for beacon in scanner.beacons]
@@ -157,21 +147,29 @@ def extend_map(beacon_map, scanner):
     beacon_map.update(beacon_positions)
 
 def connect_scanners():
-    connected = [scanners[0]]
-    pending = scanners[1:]
+    pending = [scanners[0]]
+    unconnected = scanners[1:]
     all_beacons = set(b for b in scanners[0].beacons)
 
     while len(pending) > 0:
-        print(connected, pending)
-        print(len(all_beacons))
-        s1, s2, s2_pos, s2_rot = find_next_match(connected, pending)
-        s2.relation = (s1, s2_pos, s2_rot)
+        s1 = pending.pop()
 
-        extend_map(all_beacons, s2)
+        for s2 in unconnected[:]:
+            s2_pos, s2_rot = find_match(s1, s2)
+            if s2_pos is not None:
+                print('Connected {0} and {1} at {2}'.format(s1.id, s2.id, s2_pos))
+
+                pending.append(s2)                
+                unconnected.remove(s2)
+
+                s2.relation = (s1, s2_pos, s2_rot)
+                extend_map(all_beacons, s2)
+
+    assert(len(unconnected) == 0)
 
     print(len(all_beacons))
 
-#print(find_match(scanners[0], scanners[1]))
+scanners = read_input("input-19.txt")
 
 for scanner in scanners:
     scanner.process()
