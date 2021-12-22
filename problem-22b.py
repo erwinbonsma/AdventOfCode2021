@@ -1,8 +1,6 @@
 import math
 import re
 
-status = []
-
 def is_empty(cube):
     """
     >>> is_empty(((0, 3), (2, 5), (7, 9)))
@@ -37,8 +35,10 @@ def volume(cube):
 
 def subtract(cube, sub_cube):
     """
-    >>> list(subtract(((0, 10), (0, 10), (0, 10)), ((0, 5), (0, 4), (7, 10))))
-    [((6, 10), (0, 10), (0, 10)), ((0, 5), (5, 10), (0, 10)), ((0, 5), (0, 4), (0, 6))]
+    >>> dump_cubes(subtract(((0, 10), (0, 10), (0, 10)), ((0, 5), (0, 4), (7, 10))))
+    ((6, 10), (0, 10), (0, 10))
+    ((0, 5), (5, 10), (0, 10))
+    ((0, 5), (0, 4), (0, 6))
 
     >>> dump_cubes(subtract(((0, 10), (0, 10), (0, 10)), ((5, 6), (6, 7), (7, 8))))
     ((0, 4), (0, 10), (0, 10))
@@ -72,7 +72,7 @@ def subtract(cube, sub_cube):
             return [cube1] + subtract(cube2, sub_cube)
     return []
 
-def update_status(status, new_cube, toggle_on = True):
+def update_status(status, new_cube, toggle_on):
     new_status = []
     for cube in status:
         overlap = intersect(cube, new_cube)
